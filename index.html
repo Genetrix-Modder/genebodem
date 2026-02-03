@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Countdown</title>
     <style>
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-        }
-        
-        html, body {
             height: 100%;
+            overflow: hidden;
+            background-color: #000;
         }
         
-        body {
-            background: url('https://i.ibb.co/tMtmRkr4/Wallpaper.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://raw.githubusercontent.com/Genetrix-Modder/genebodem/main/Wallpaper.png');
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
         }
         
-        #timer {
+        .timer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: white;
-            font-family: monospace;
-            font-size: 20px;
-            padding: 30px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-family: 'Courier New', monospace;
+            font-size: 120px;
+            font-weight: bold;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
+            letter-spacing: 10px;
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 768px) {
+            .timer {
+                font-size: 60px;
+                letter-spacing: 5px;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="timer">16:04:00:00:00</div>
+    <div class="background"></div>
+    <div class="timer" id="timer">16:04:00:00:00</div>
 
     <script>
+        // Target date: May 31, 2026
         const targetDate = new Date('May 31, 2026 00:00:00').getTime();
         
         function updateTimer() {
             const now = new Date().getTime();
             const distance = targetDate - now;
             
+            // Calculate time units
             const weeks = Math.floor(distance / (1000 * 60 * 60 * 24 * 7));
             const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 7)) / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
             
+            // Format as WW:DD:HH:MM:SS
             const formatted = 
                 weeks.toString().padStart(2, '0') + ':' +
                 days.toString().padStart(2, '0') + ':' +
@@ -54,12 +74,14 @@
             
             document.getElementById('timer').textContent = formatted;
             
+            // If countdown is over
             if (distance < 0) {
                 clearInterval(timerInterval);
                 document.getElementById('timer').textContent = '00:00:00:00:00';
             }
         }
         
+        // Update immediately and every second
         updateTimer();
         const timerInterval = setInterval(updateTimer, 1000);
     </script>
